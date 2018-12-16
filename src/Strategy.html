@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>设计模式之策略模式</title>
+</head>
+<body>
+    <script>
+        // 年底了该发年终奖了，然后老板让开发一个计算年终奖的工具
+        // 然后我们就开始开发
+        var calculateBonus = function(performanceLevel, salary) {
+            if(performanceLevel == 'S') {
+                return salary * 4;
+            }
+
+            if(performanceLevel == 'A') {
+                return salary * 3;
+            }
+
+            if(performanceLevel == 'B') {
+                return salary * 2;
+            }
+        };
+        console.log(calculateBonus('S', 10000));
+        console.log(calculateBonus('B', 8000));
+
+        // 对于一个方法处理的逻辑不要太多
+        // 当我们又很多级别的时候，calculateBonus方法就会很庞大
+
+        var PerformanceS = function() {};
+        PerformanceS.prototype.calculate = function(salary) {
+            return salary * 4;
+        };
+
+        var PerformanceA = function() {};
+        PerformanceA.prototype.calculate = function(salary) {
+            return salary * 3;
+        };
+
+        var PerformanceB = function() {};
+        PerformanceB.prototype.calculate = function(salary) {
+            return salary * 2;
+        };
+
+        var Bonus = function() {
+            this.salary = null;
+            this.strategy = null;
+        }
+        Bonus.prototype.setSalary = function(salary) {
+            this.salary = salary;
+        };
+        Bonus.prototype.setStrategy = function(strategy) {
+            this.strategy = strategy;
+        };
+        Bonus.prototype.getSalary = function() {
+            return this.strategy.calculate(this.salary);
+        }
+
+        var bonus = new Bonus();
+        bonus.setSalary(10000);
+        bonus.setStrategy(new PerformanceB());
+        console.log(bonus.getSalary());
+
+        // js中的策略模式
+        var strategies = {
+            "S": function(salary) {
+                return salary * 4;
+            },
+            "A": function(salary) {
+                return salary * 3;
+            },
+            "B": function(salary) {
+                return salary * 2;
+            }
+        }
+        var calculateBonus2 = function(level, salary) {
+            return strategies[level](salary);
+        }
+        console.log(calculateBonus2('A', 8000));
+    </script>
+</body>
+</html>
