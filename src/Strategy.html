@@ -5,11 +5,175 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>设计模式之策略模式</title>
+    <style>
+        .blend {
+            background: #ffffff;
+        }
+        .blend img {
+            mix-blend-mode: soft-light;
+            width: 100px;
+            height: 100px;
+        }
+
+        .box {
+            margin: 30px 30px;
+            width: 200px;
+            height: 200px;
+            position: relative;
+            background: #fff;
+            float: left;
+        }
+        .box::before {
+            content: '';
+            z-index: -1;
+            position: absolute;
+            width: 220px;
+            height: 220px;
+            top: -10px;
+            left: -10px;
+            background-image: linear-gradient(90deg, yellow, gold);
+        }
+
+        .button {
+            color: black;
+            border: 10px solid currentColor;
+            outline: none;
+        }
+        .button:hover {
+            color: red;
+        }
+        .button:active {
+            color: green;
+        }
+
+        .img_container {
+            width: 200px;
+            height: 150px;
+            background: orange;
+        }
+        .img_container img {
+            width: 150px;
+            height: 100px;
+            object-fit: cover;
+        }
+
+        .list {
+            counter-reset: i;
+        }
+        .list > li {
+            counter-increment: i 2;
+        }
+        .list li::after {
+            content: "[" counter(i) "]";
+        }
+
+        .numbers {
+            counter-reset: sum;
+        }
+        #one:checked {
+            counter-increment: sum 1;
+        }
+        #two:checked {
+            counter-increment: sum 2;
+        }
+        #three:checked {
+            counter-increment: sum 3;
+        }
+        #four:checked {
+            counter-increment: sum 4;
+        }
+        #five:checked {
+            counter-increment: sum 5;
+        }
+        #six:checked {
+            counter-increment: sum 6;
+        }
+        .sum::after {
+            content: '=' counter(sum)
+        }
+
+        .hidden {
+            visibility: hidden;
+        }
+        .hidden .visible {
+            visibility: visible;
+        }
+
+        .❤ {
+            color: red;
+        }
+    </style>
 </head>
 <body>
+    <div class="bonus">
+        <form action="javascript:;">
+            <div><label>工资：</label><input id="salary"></div>
+            <div>
+                <label>等级：</label>
+                <select name="performance" id="performance">
+                    <option value="S">S</option>
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                    <option value="D">D</option>
+                </select>
+            </div>
+            <button id="cal">计算奖金</button>
+            <div id="bonus">最终奖金：</div>
+        </form>
+    </div>
+    <div class="blend">
+        <img src="https://ossimg.wonderfull.cn/6e148544f978a142cb237d6adb8d12d9.png?x-oss-process=image/resize,w_330,h_4000,m_lfit">
+        <img src="https://ossimg.wonderfull.cn/6e148544f978a142cb237d6adb8d12d9.png?x-oss-process=image/resize,w_330,h_4000,m_lfit">
+    </div>
+    <hr/>
+    <div style="position: relative; height: 350px;">
+        <div class="box"></div>
+    </div>
+    <hr/>
+    <button class="button">点我点我</button>
+    <hr/>
+    <div class="img_container">
+        <img src="https://ossimg.wonderfull.cn/e1a55e820fabf8462477abb9a3180897.png" alt="">
+    </div>
+    <hr/>
+    <ol class="list">
+        <li>a</li>
+        <li>b</li>
+        <li>c</li>
+    </ol>
+    <div class="numbers">
+        <input type="checkbox" id="one"><label for="one">1</label>
+        <input type="checkbox" id="two"><label for="two">2</label>
+        <input type="checkbox" id="three"><label for="three">3</label>
+        <input type="checkbox" id="four"><label for="four">4</label>
+        <input type="checkbox" id="five"><label for="five">5</label>
+        <input type="checkbox" id="six"><label for="six">6</label>
+    </div>
+    <div class="sum">Sum: </div>
+    <hr/>
+    <div class="hidden">
+        父元素
+        <div class="visible">子元素</div>
+    </div>
+    <hr/>
+    <div class="❤">This is Content!!!</div>
     <script>
-        // 年底了该发年终奖了，然后老板让开发一个计算年终奖的工具
-        // 然后我们就开始开发
+        // document.getElementById('cal').addEventListener('click', function() {
+        //     var performance = document.getElementById('performance').value;
+        //     var salary = document.getElementById('salary').value;
+        //     var bonus = calculateBonus(performance, salary);
+        //     document.getElementById('bonus').innerHTML = '最终奖金：' + bonus;
+        // });
+
+         document.getElementById('cal').addEventListener('click', function() {
+            var performance = document.getElementById('performance').value;
+            var salary = document.getElementById('salary').value;
+            var bonus = calculateBonus2(performance, salary);
+            document.getElementById('bonus').innerHTML = '最终奖金：' + bonus;
+        });
+
+        // 我们就开始开发
         var calculateBonus = function(performanceLevel, salary) {
             if(performanceLevel == 'S') {
                 return salary * 4;
