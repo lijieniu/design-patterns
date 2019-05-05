@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>迭代器模式</title>
+</head>
+<body>
+    <script>
+        // 迭代器模式：提供一种方法顺序访问集合对象中的各个元素；
+        //  内部迭代器和外部迭代器。
+        // 1、内部迭代器：
+        //  特点：使用者不需要知道内部的实现逻辑，只需要一次初始调用，但是使用不灵活；
+
+        var each = function(array, callback) {
+            for(var i = 0; i < array.length; i++) {
+                callback(i, array[i]);
+            }
+        }
+        each([1, 2, 3], function(index, item) {
+            console.log([index, item]);
+        });
+        var compare = function(ary1, ary2) {
+            if(ary1.length !== ary2.length) {
+                console.log('ary1和ary2不相等');
+                return;
+            }
+            each(ary1, function(i, n) {
+                if(n !== ary2[i]) {
+                    throw new Error('ary1和ary2不相等');
+                }
+            });
+            console.log('ary1和ary2相等');
+        }
+        compare([1, 2, 3], [1, 2, 3]);
+
+        // 2、外部迭代器；
+        // 特点：必须显式的请求迭代下一个元素，虽然增加了一定的复杂度，但是增强了迭代的灵活性；
+        var Iterator = function(obj) {
+            var current = 0;
+            var next = function() {
+                current += 1;
+            }
+            var isDone = function() {
+                return current >= obj.length;
+            }
+            var getCurrItem = function() {
+                return obj[current];
+            }
+            return {
+                current: current,
+                isDone: isDone,
+                getCurrItem: getCurrItem,
+                next: next,
+                length: obj.length
+            }
+        }
+        var compare2 = function(iterator1, iterator2) {
+            if(iterator1.length !== iterator2.length) {
+                throw new Error('ary1和ary2不相等');
+            }
+            while(!iterator1.isDone() && !iterator2.isDone()) {
+                if(iterator1.getCurrItem() !==iterator2.getCurrItem()) {
+                    throw new Error('ary1和ary2不相等');
+                }
+                iterator1.next();
+                iterator2.next();
+            }
+            console.log('ary1和ary2相等');
+        }
+        var iterator1 = new Iterator([1, 2, 4]);
+        var iterator2 = new Iterator([1, 2, 3]);
+        compare2(iterator1, iterator2);
+    </script>
+</body>
+</html>

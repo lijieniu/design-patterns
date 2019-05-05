@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>代理模式</title>
+    <style>
+        img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+    
+    <script>
+        // 代理模式：
+        var Flower = function(name) {
+            this.name = name;
+        };
+        var xiaoming = {
+            sendFlower: function(target) {
+                var flower = new Flower('玫瑰花🌹');
+                target.receiveFlower(flower);
+            }
+        }
+
+        var xiaoli = {
+            receiveFlower: function(flower) {
+                if(A.mode > 60) {
+                    A.receiveFlower(flower);
+                } 
+                
+            }
+        }
+
+        var A = {
+            mode: 50,
+            receiveFlower: function(flower) {
+                console.log('A收到了' + flower.name);
+            }
+        }
+
+        xiaoming.sendFlower(xiaoli);
+
+
+        // 1、虚拟代理：把一些开销很大的对象，延迟到真正需要它的时候才创建执行
+                // 1.1：图片延迟加载
+        var myImage = (function() {
+            var imgNode = document.createElement('img');
+            document.body.appendChild(imgNode);
+
+            return {
+                setSrc: function(src) {
+                    imgNode.src = src;
+                }
+            }
+        })();
+        // 使用代理
+        var proxyImage = (function() {
+            var img = new Image();
+            img.onload = function() {
+                console.log('真正的图片加载');
+                myImage.setSrc(this.src);
+            };
+            return {
+                setSrc: function(src) {
+                    console.log('先加载了loading图');
+                    myImage.setSrc('./img/default-avatar.png'); // loading图
+                    img.src = src;
+                }
+            }
+        })();
+
+        proxyImage.setSrc('https://s.wandougongzhu.cn/s/88/_75b89e.png');
+
+
+                // 1.2：合并http请求(比如错误日志的发送)
+        var files = [];
+        for(var i = 0; i < 10; i++) {
+            var obj = {};
+            obj.filename = 'file' + i;
+            files.push(obj);
+        }
+        var uploadFile = function(filename) {
+            console.log('正在上传文件' + filename);
+        }
+        var proxyUploadFile = (function() {
+            var cache = [],
+                timer;
+            return function(filename) {
+                cache.push(filename);
+                if(timer) {
+                    return;
+                }
+                timer = setTimeout(function() {
+                    uploadFile(cache.join(','));
+                    clearTimeout(timer);
+                    timer = null;
+                    cache.length = 0;
+                }, 2000);
+            }
+
+        })();
+        for(var j = 0; j < 10; j++) {
+            proxyUploadFile(files[j].filename);
+        }
+    
+        // 2、缓存代理：为一些开销大的运算结果提供暂时的存储，下次运算的时候，如果传过来的参数和之前的一致
+        //     则可以返回存储的结果
+        var mult = function() {
+            var a = 1;
+            for(var i = 0; i < arguments.length; i++) {
+                a = a * arguments[i];
+            }
+            return a;
+        }
+        mult(2, 3, 4);
+
+        var proxyMult = (function() {
+            var cache = {};
+            return function() {
+                var args = Array.prototype.join.call(arguments, ',');
+                if(args in cache) {
+                    console.log(args + '的乘积为: ' + cache[args]);
+                    return cache[args];
+                }
+                return cache[args] = mult.apply(this, arguments);
+            }
+        })();
+        var result2 = proxyMult(2, 3, 4, 5, 6, 7);
+        proxyMult(2, 3, 4, 5, 6, 7);
+        proxyMult(2, 3, 4, 5, 6, 7);
+
+        // 代理模式优点：
+        //     将代理对象与被代理对象分离，降低了系统的耦合度；作为一个中介可以保护目标对象；对目标对象调用之前
+        //     做一些其他的操作。
+        //        缺点：增加了系统的复杂度。
+    </script>
+</body>
+</html>
