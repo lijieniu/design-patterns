@@ -61,7 +61,6 @@
         }, 3000);
 
         // 
-        var a = 1;
         function Event() {
             this.events = [];
         }
@@ -73,7 +72,6 @@
                 this.events[type].push(handler);
             },
             triggerEvent: function(type, args) {
-                console.log(a);
                 if(this.events) {
                     var events = this.events[type];
 
@@ -86,7 +84,9 @@
             }
         }
         var f3 = function() {
-            console.log('f3 click');
+            setTimeout(function() {
+                console.log('f3 click');
+            }, 4000);
         }
         var e = new Event();
         e.addEventListener('click', f3);
