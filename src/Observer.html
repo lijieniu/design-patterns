@@ -4,24 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>观察者模式</title>
+    <title>设计模式</title>
 </head>
 <body>
     <script>
+
+        
+        let tabs = ['1', '20'];
+        console.log(tabs);
+
         // 观察者模式/发布订阅模式
-        // 实际使用中的区别：观察者模式----是一个对象，维护一个依赖列表，当状态发生变化的时候通知依赖者；
-        //                发布订阅模式----消息发布者和接收者中间有个事件中心，用来调度事件；事件中心作用：分配调度事件，进行消息的二次处理等等
-        // 二者区别：消息会不会直接发布给订阅者，如果会就是观察者模式，如果不会就是发布订阅模式；发布订阅模式不知道对方的存在，发布订阅模式中消息接收着订阅的是某一个主题
-        // 可以过滤掉其他的主题，比如订阅了主题A，但是消息发布者发布了多个主题的消息，那么接收者只能收到主题A的消息，这种过滤消息的是消息调度中心
-        // 1、消息发布者
-        // 2、消息订阅者
-        // 3、发布消息
-        // 4、接收消息
-
-
-
-
-
         function Observer() {
             this.funs = [];
         }
@@ -60,7 +52,7 @@
             o.publish('Tom回来了');
         }, 3000);
 
-        // 
+        
         function Event() {
             this.events = [];
         }
