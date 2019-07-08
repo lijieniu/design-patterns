@@ -98,7 +98,7 @@
         }
         var openBtn = document.getElementById('open');
         var closeBtn = document.getElementById('close');
-        deviceCommand(openBtn, deskLamp.open);
+        deviceCommand(openBtn, deskLamp.open); // 如果不实用命令模式，openBtn.onclick = openfunction() {} 
         deviceCommand(closeBtn, deskLamp.close);
         // 如果不实用命令模式不用deviceCommand，直接btn.open()也是可以的，但是耦合性太强；主要目的就是将调用对象与实现操作的对象隔离开；
         
