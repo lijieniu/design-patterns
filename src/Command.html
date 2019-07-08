@@ -5,14 +5,137 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>设计模式-命令模式</title>
+    <style>
+        .aside {
+            width: 200px;
+            height: 200px;
+            float: left;
+            background-color: red;
+        }
+        .main {
+            width: 500px;
+            height: 500px;
+            background-color: yellow;
+        }
+        .child {
+            width: 100px;
+            height: 100px;
+            background-color: green;
+            float: left;
+        }
+        .parent {
+            overflow: hidden;
+        }
+    </style>
 </head>
 <body>
+
+    <div class="aside">
+
+    </div>
+    <div class="main">
+
+    </div>
+
+    <div class="parent">
+        <div class="child"></div>
+        <div class="child"></div>
+    </div>
+
+    <button id="open">开灯</button>
+    <button id="close">关灯</button>
+
     <script>
         // 命令模式是将请求封装成一个对象，从而可用不同的请求对客户进行参数化；将函数的调用、请求和操作封装成一个单一的对象；然后对这个对象进行一系列的处理；
         // 应用场景：有时候需要向某些对象发送请求，但是并不知道请求的接收者是谁，也不知道被请求的操作是什么；
         // 命令模式使用一种松耦合的方式使请求发送者和请求接收者消除彼此之间的耦合关系；
         // 订餐场景中的订单充当的就是命令模式中对象；
         // 命令模式还支持撤销、排队操作；
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        // 菜单
+        var deviceCommand = function(button, func) {
+            button.onclick = function() {
+                func();
+            }
+        }
+        // 厨师
+        var deskLamp = {
+            open: function() {
+                console.log('已为你开灯');
+            },
+            close: function() {
+                console.log('已为你关灯');
+            }
+        }
+        var openBtn = document.getElementById('open');
+        var closeBtn = document.getElementById('close');
+        deviceCommand(openBtn, deskLamp.open);
+        deviceCommand(closeBtn, deskLamp.close);
+        // 如果不实用命令模式不用deviceCommand，直接btn.open()也是可以的，但是耦合性太强；主要目的就是将调用对象与实现操作的对象隔离开；
+        
+
+
+
+        //
+        var setCommand = function(func) {
+            func();
+        }
+        // 厨师也不管谁点的菜，接到命令就开始做
+        var Cook = {
+            cook: function() {
+                console.log('cooking');
+            },
+            stopCook: function() {
+                console.log('stop cook');
+            }
+        }
+        var CookCommand = function(cook) {
+            return function() {
+                cook.cook();
+            }
+        }
+        var StopCookCommand = function(cook) {
+            return function() {
+                cook.stopCook();
+            }
+        }
+        // 分配任意一个厨师
+        var cookCommand = CookCommand(Cook);
+        var stopCookCommand = StopCookCommand(Cook);
+        setCommand(cookCommand);
+
+        // 很容易增加命令
+        setCommand(stopCookCommand);
+        
     </script>
 </body>
 </html>
