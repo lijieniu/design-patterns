@@ -82,7 +82,7 @@
 
 
         // 菜单
-        var deviceCommand = function(button, func) {
+        var deviceCommand = function(button, func) { // 并不关心button是谁，也不关心func要执行什么命令
             button.onclick = function() {
                 func();
             }
@@ -106,10 +106,10 @@
 
 
         //
-        var setCommand = function(func) {
-            func();
+        var setCommand = function(cook) {
+            cook.cook();
         }
-        // 厨师也不管谁点的菜，接到命令就开始做
+        // 
         var Cook = {
             cook: function() {
                 console.log('cooking');
@@ -118,23 +118,23 @@
                 console.log('stop cook');
             }
         }
-        var CookCommand = function(cook) {
-            return function() {
-                cook.cook();
-            }
-        }
-        var StopCookCommand = function(cook) {
-            return function() {
-                cook.stopCook();
-            }
-        }
+        // var CookCommand = function(cook) {
+        //     return function() {
+        //         cook.cook();
+        //     }
+        // }
+        // var StopCookCommand = function(cook) {
+        //     return function() {
+        //         cook.stopCook();
+        //     }
+        // }
         // 分配任意一个厨师
-        var cookCommand = CookCommand(Cook);
-        var stopCookCommand = StopCookCommand(Cook);
-        setCommand(cookCommand);
+        // var cookCommand = CookCommand(Cook);
+        // var stopCookCommand = StopCookCommand(Cook);
+        setCommand(Cook);
 
         // 很容易增加命令
-        setCommand(stopCookCommand);
+        // setCommand(stopCookCommand);
         
     </script>
 </body>

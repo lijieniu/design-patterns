@@ -13,6 +13,8 @@
 <body>
     <script>
         // 将对象组合成树形结构以表示“部分-整体”的层次结构。使单个对象和组合对象的使用具有一致性。
+        // 同时处理简单对象和由简单对象组成的复杂对象，这些简单对象和复杂对象组成树形结构，在客户端对其进行处理的时候要保持一致性。
+        // 应用场景：对象具有明显的层次结构并且想要统一的使用它们，比如文件夹目录目录、点餐时的套餐、DOM树
         var MacroCommand = function() {
             return {
                 commandList: [],
@@ -39,7 +41,7 @@
         var macroCommand = MacroCommand();
         macroCommand.add(closeDoorCommand);
         macroCommand.add(openTVCommand);
-        macroCommand.execute();
+        macroCommand.execute(); // 组合模式的关键
 
         console.log('----------华丽的分割线1-----------');
 
@@ -53,12 +55,12 @@
         macroCommand.execute();
 
         console.log('----------华丽的分割线2-----------');
-        var parentMacroCommand = MacroCommand();
-        parentMacroCommand.add(openTVCommand);
-        var childMacroCommand = MacroCommand();
-        childMacroCommand.add(closeDoorCommand);
-        parentMacroCommand.add(childMacroCommand);
-        parentMacroCommand.execute();
+        var macroCommand2 = MacroCommand();
+        macroCommand2.add(openTVCommand);
+        var leafMacroCommand = MacroCommand();
+        leafacroCommand.add(closeDoorCommand);
+        macroCommand2.add(leafMacroCommand);
+        macroCommand2.execute();
     </script>
 </body>
 </html>
