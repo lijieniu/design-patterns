@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>装饰者模式</title>
+</head>
+<body>
+    <script>
+        class Plan {
+            fire() {
+                console.log('开火');
+            }
+        }
+        // 想在开火之前增加一个倒计时，不能在原对象中增加
+        class MissileDecorator {
+            constructor(plan) {
+                this.plan = plan;
+            }
+            fire() {
+                [1, 2, 3].forEach((item) => {
+                    setTimeout(() => {
+                        console.log(4 - item);
+                    }, item * 1000);
+                });
+                setTimeout(() => {
+                    this.plan.fire();
+                }, 3000);
+            }
+        }
+        new MissileDecorator(new Plan()).fire();
+    </script>
+</body>
+</html>
