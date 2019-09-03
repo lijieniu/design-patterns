@@ -6,8 +6,89 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>装饰者模式</title>
 </head>
+<div>
+    <label>选择手机</label>
+    <select id="phone-select">
+        <option value="">请选择</option>
+        <option value="iphonexx">iphonexx</option>
+        <option value="iphone11">iphone11</option>
+    </select>
+    <label>输入数量</label>
+    <input id="phone-num-input" type="number">
+    <div>
+        <span>你选择的手机: </span>
+        <span id="phone-type"></span>
+    </div>
+    <div>
+        <span>你购买的数量: </span>
+        <span id="phone-num"></span>
+    </div>
+    <button disabled id="addtocar">加入购物车</button>
+</div>
 <body>
     <script>
+
+        let goods = {
+            "iphonexx": 10,
+            "iphone11": 6
+        }
+        var phoneSelect = document.getElementById('phone-select'),
+            numberInput = document.getElementById('phone-num-input'),
+            phoneType = document.getElementById('phone-type'),
+            phoneNum = document.getElementById('phone-num'),
+            addToCarBtn = document.getElementById('addtocar');
+        phoneSelect.onchange = function() {
+            var type = this.value,
+                number = numberInput.value,
+                stock = goods[type];
+            phoneType.innerHTML = type;
+            if(!type) {
+                addToCarBtn.disabled = true;
+                addToCarBtn.innerHTML = '请选择手机';
+                return;
+            }
+            if(number <= 0) {
+                addToCarBtn.disabled = true;
+                addToCarBtn.innerHTML = '请输入正确的数量';
+                return;
+            }
+            if(number > stock) {
+                addToCarBtn.disabled = true;
+                addToCarBtn.innerHTML = '库存不足';
+                return;
+            }
+            addToCarBtn.disabled = false;
+            addToCarBtn.innerHTML = '加入购物车';
+        }
+
+        numberInput.oninput = function() {
+            var type = phoneSelect.value,
+                number = numberInput.value,
+                stock = goods[type];
+            phoneNum.innerHTML = number;
+            if(!type) {
+                addToCarBtn.disabled = true;
+                addToCarBtn.innerHTML = '请选择手机';
+                return;
+            }
+            if(number <= 0) {
+                addToCarBtn.disabled = true;
+                addToCarBtn.innerHTML = '请输入正确的数量';
+                return;
+            }
+            console.log(number + ' ' + stock);
+            if(number > stock) {
+                addToCarBtn.disabled = true;
+                addToCarBtn.innerHTML = '库存不足';
+                return;
+            }
+            addToCarBtn.disabled = false;
+            addToCarBtn.innerHTML = '加入购物车';
+        }
+        
+        
+
+
         class Plan {
             fire() {
                 console.log('开火');
