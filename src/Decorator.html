@@ -6,26 +6,27 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>装饰者模式</title>
 </head>
-<div>
-    <label>选择手机</label>
-    <select id="phone-select">
-        <option value="">请选择</option>
-        <option value="iphonexx">iphonexx</option>
-        <option value="iphone11">iphone11</option>
-    </select>
-    <label>输入数量</label>
-    <input id="phone-num-input" type="number">
-    <div>
-        <span>你选择的手机: </span>
-        <span id="phone-type"></span>
-    </div>
-    <div>
-        <span>你购买的数量: </span>
-        <span id="phone-num"></span>
-    </div>
-    <button disabled id="addtocar">加入购物车</button>
-</div>
+
 <body>
+    <div>
+        <label>选择手机</label>
+        <select id="phone-select">
+            <option value="">请选择</option>
+            <option value="iphonexx">iphonexx</option>
+            <option value="iphone11">iphone11</option>
+        </select>
+        <label>输入数量</label>
+        <input id="phone-num-input" type="number">
+        <div>
+            <span>你选择的手机: </span>
+            <span id="phone-type"></span>
+        </div>
+        <div>
+            <span>你购买的数量: </span>
+            <span id="phone-num"></span>
+        </div>
+        <button type="primary" disabled id="addtocar">加入购物车</button>
+    </div>
     <script>
 
         let goods = {
@@ -37,56 +38,99 @@
             phoneType = document.getElementById('phone-type'),
             phoneNum = document.getElementById('phone-num'),
             addToCarBtn = document.getElementById('addtocar');
-        phoneSelect.onchange = function() {
-            var type = this.value,
-                number = numberInput.value,
-                stock = goods[type];
-            phoneType.innerHTML = type;
-            if(!type) {
-                addToCarBtn.disabled = true;
-                addToCarBtn.innerHTML = '请选择手机';
-                return;
-            }
-            if(number <= 0) {
-                addToCarBtn.disabled = true;
-                addToCarBtn.innerHTML = '请输入正确的数量';
-                return;
-            }
-            if(number > stock) {
-                addToCarBtn.disabled = true;
-                addToCarBtn.innerHTML = '库存不足';
-                return;
-            }
-            addToCarBtn.disabled = false;
-            addToCarBtn.innerHTML = '加入购物车';
-        }
+        // phoneSelect.onchange = function() {
+        //     var type = this.value,
+        //         number = numberInput.value,
+        //         stock = goods[type];
+        //     phoneType.innerHTML = type;
+        //     if(!type) {
+        //         addToCarBtn.disabled = true;
+        //         addToCarBtn.innerHTML = '请选择手机';
+        //         return;
+        //     }
+        //     if(number <= 0) {
+        //         addToCarBtn.disabled = true;
+        //         addToCarBtn.innerHTML = '请输入正确的数量';
+        //         return;
+        //     }
+        //     if(number > stock) {
+        //         addToCarBtn.disabled = true;
+        //         addToCarBtn.innerHTML = '库存不足';
+        //         return;
+        //     }
+        //     addToCarBtn.disabled = false;
+        //     addToCarBtn.innerHTML = '加入购物车';
+        // }
 
-        numberInput.oninput = function() {
-            var type = phoneSelect.value,
-                number = numberInput.value,
-                stock = goods[type];
-            phoneNum.innerHTML = number;
-            if(!type) {
-                addToCarBtn.disabled = true;
-                addToCarBtn.innerHTML = '请选择手机';
-                return;
+        // numberInput.oninput = function() {
+        //     var type = phoneSelect.value,
+        //         number = numberInput.value,
+        //         stock = goods[type];
+        //     phoneNum.innerHTML = number;
+        //     if(!type) {
+        //         addToCarBtn.disabled = true;
+        //         addToCarBtn.innerHTML = '请选择手机';
+        //         return;
+        //     }
+        //     if(number <= 0) {
+        //         addToCarBtn.disabled = true;
+        //         addToCarBtn.innerHTML = '请输入正确的数量';
+        //         return;
+        //     }
+        //     console.log(number + ' ' + stock);
+        //     if(number > stock) {
+        //         addToCarBtn.disabled = true;
+        //         addToCarBtn.innerHTML = '库存不足';
+        //         return;
+        //     }
+        //     addToCarBtn.disabled = false;
+        //     addToCarBtn.innerHTML = '加入购物车';
+        // }
+        
+        // end
+        // 购买代码编写完成，如果需求有变化，需要加上颜色选择，上面要加上大量的代码
+        // 每个节点对象都是耦合在一起的，比如input中有select，select中有input；
+        // 某个节点对象的改变都需要通知其他节点对象
+
+        // 引入中介者
+        var mediator = (function() {
+            return {
+                changed: function(obj) {
+                    var type = phoneSelect.value;
+                    var number = numberInput.value;
+                    var stock = goods[type];
+                    if(obj === phoneSelect) {
+                        phoneType.innerHTML = type;
+                    } else if(obj === numberInput) {
+                        phoneNum.innerHTML = number;
+                    }
+                    if(!type) {
+                        addToCarBtn.disabled = true;
+                        addToCarBtn.innerHTML = '请选择手机';
+                        return;
+                    }
+                    if(number <= 0) {
+                        addToCarBtn.disabled = true;
+                        addToCarBtn.innerHTML = '请输入正确的数量';
+                        return;
+                    }
+                    console.log(number + ' ' + stock);
+                    if(number > stock) {
+                        addToCarBtn.disabled = true;
+                        addToCarBtn.innerHTML = '库存不足';
+                        return;
+                    }
+                    addToCarBtn.disabled = false;
+                    addToCarBtn.innerHTML = '加入购物车';
+                }
             }
-            if(number <= 0) {
-                addToCarBtn.disabled = true;
-                addToCarBtn.innerHTML = '请输入正确的数量';
-                return;
-            }
-            console.log(number + ' ' + stock);
-            if(number > stock) {
-                addToCarBtn.disabled = true;
-                addToCarBtn.innerHTML = '库存不足';
-                return;
-            }
-            addToCarBtn.disabled = false;
-            addToCarBtn.innerHTML = '加入购物车';
+        })();
+        phoneSelect.onchange = function() {
+            mediator.changed(this);
         }
-        
-        
+        numberInput.oninput = function() {
+            mediator.changed(this);
+        }
 
 
         class Plan {
