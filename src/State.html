@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>状态模式</title>
+</head>
+<body>
+    当前状态：<span id="state">关</span>
+    <button id="switch-btn">开关</button>
+    <script>
+        var Light = function() {
+            this.state = 'off';
+            this.button = null;
+        }
+        var switchBtn = document.getElementById('switch-btn'),
+            stateText = document.getElementById('state');
+        Light.prototype.init = function() {
+            this.button = switchBtn;
+            let _this = this;
+            this.button.onclick = function() {
+                _this.pressed();
+            }
+        }
+        // Light.prototype.pressed = function() {
+        //     if(this.state == 'off') {
+        //         this.state = 'on';
+        //         stateText.innerHTML = '开';
+        //     } else if(this.state == 'on') {
+        //         this.state = 'off';
+        //         stateText.innerHTML = '关';
+        //     }
+        // }
+
+        // 如果要加入多个光的强度
+        Light.prototype.pressed = function() {
+            if(this.state == 'off') {
+                this.state = 'weak';
+                stateText.innerHTML = '弱光';
+            } else if(this.state == 'weak') {
+                this.state = 'strong';
+                stateText.innerHTML = '强光';
+            } else if(this.state == 'strong') {
+                this.state = 'off';
+                stateText.innerHTML = '关';
+            }
+        }
+        var light = new Light();
+        light.init();
+
+        // 使用状态模式改进
+        var OffLightState = function(light) {
+            this.light = light;
+        }
+        OffLightState.prototype.pressed = function() {
+            this.light.setState(this.light.weekLightState);
+        }
+        var WeakLightState = function(light) {
+            this.light = light;
+        }
+        WeakLightState.prototype.pressed = function() {
+            this.light.setState(this.light.strongLightState);
+        }
+        var StrongLightState = function(light) {
+            this.light = light;
+        }
+        StrongLightState.prototype.pressed = function() {
+            this.light.setState(this.light.strongLightState);
+        }
+    </script>
+</body>
+</html>
